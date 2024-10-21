@@ -9,19 +9,33 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Transform right_pos;
     [SerializeField] Transform left_pos;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Animator player_Animator;
     int current_pos = 0;
     public float side_speed;
     public float running_speed;
     public float jump_force;
+    bool isGameStarted = false;
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        isGameStarted = false;
         current_pos = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isGameStarted)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("Game is started");
+                isGameStarted=true;
+                player_Animator.SetInteger("isRunning",1);
+            }
+        }
+        if(isGameStarted)
+        {
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + running_speed * Time.deltaTime);
 
         if (current_pos == 0)
@@ -80,6 +94,7 @@ public class Player_Controller : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity = Vector3.up * jump_force;
+        }
         }
     }
 }
