@@ -10,18 +10,26 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Transform right_pos;
     [SerializeField] Transform left_pos;
     [SerializeField] Rigidbody rb;
-    [SerializeField] Animator player_Animator;
+
+
     int current_pos = 0;
+
     public float side_speed;
     public float running_speed;
     public float jump_force;
+
     bool isGameStarted = false;
     bool isGameOver = false;
     bool isSlide = false;
+
+    [SerializeField] Animator player_Animator;
+    [SerializeField] private GameObject GameOverPanel;
+    [SerializeField] private GameObject tap_to_start_canvas;
     // Start is called before the first frame update
     void Start()
     {
         isGameStarted = false;
+        isGameOver = false;
         current_pos = 0;
     }
 
@@ -35,6 +43,7 @@ public class Player_Controller : MonoBehaviour
                 isGameStarted = true;
                 player_Animator.SetInteger("isRunning", 1);
                 player_Animator.speed = 1.5f;
+                tap_to_start_canvas.SetActive(false);
             }
         }
         if (isGameStarted)
@@ -104,6 +113,10 @@ public class Player_Controller : MonoBehaviour
             {
                 StartCoroutine(Slide());
             }
+        }
+        if (isGameOver && !GameOverPanel.activeSelf)
+        {
+            GameOverPanel.SetActive(true);
         }
     }
     IEnumerator Jump()
