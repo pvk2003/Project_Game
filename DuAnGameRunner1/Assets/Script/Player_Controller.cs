@@ -11,12 +11,14 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Transform left_pos;
     [SerializeField] Rigidbody rb;
 
-
     int current_pos = 0;
 
     public float side_speed;
     public float running_speed;
     public float jump_force;
+
+    public float speedIncrease = 0.1f;  // Tốc độ gia tăng mỗi giây
+    public float maxRunningSpeed = 20f; // Giới hạn tốc độ tối đa
 
     bool isGameStarted = false;
     bool isGameOver = false;
@@ -25,7 +27,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] Animator player_Animator;
     [SerializeField] private GameObject GameOverPanel;
     [SerializeField] private GameObject tap_to_start_canvas;
-    // Start is called before the first frame update
+
     void Start()
     {
         isGameStarted = false;
@@ -46,8 +48,13 @@ public class Player_Controller : MonoBehaviour
                 tap_to_start_canvas.SetActive(false);
             }
         }
-        if (isGameStarted)
+        if (isGameStarted && !isGameOver)
         {
+            // Tăng tốc độ chạy theo thời gian
+            running_speed += speedIncrease * Time.deltaTime;
+            running_speed = Mathf.Clamp(running_speed, 0, maxRunningSpeed);
+
+            // Di chuyển nhân vật về phía trước với tốc độ hiện tại
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + running_speed * Time.deltaTime);
 
             if (current_pos == 0)
@@ -56,7 +63,6 @@ public class Player_Controller : MonoBehaviour
                 {
                     current_pos = 1;
                 }
-
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
                     current_pos = 2;
@@ -78,7 +84,6 @@ public class Player_Controller : MonoBehaviour
             }
 
             if (current_pos == 0)
-
             {
                 if (Vector3.Distance(transform.position, new Vector3(center_pos.position.x, transform.position.y, transform.position.z)) >= 0.1f)
                 {
@@ -108,6 +113,7 @@ public class Player_Controller : MonoBehaviour
                 rb.velocity = Vector3.up * jump_force;
                 StartCoroutine(Jump());
             }
+
             // Trượt khi nhấn mũi tên xuống
             if (Input.GetKeyDown(KeyCode.DownArrow) && !isSlide)
             {
@@ -119,6 +125,7 @@ public class Player_Controller : MonoBehaviour
             GameOverPanel.SetActive(true);
         }
     }
+
     IEnumerator Jump()
     {
         player_Animator.SetInteger("isJump", 1);
