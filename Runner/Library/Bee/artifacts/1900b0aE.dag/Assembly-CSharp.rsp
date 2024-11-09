@@ -358,9 +358,8 @@
 "Assets/Script/CamScript.cs"
 "Assets/Script/Coin_Script.cs"
 "Assets/Script/GameOverButtomScript.cs"
+"Assets/Script/palt_random_script.cs"
 "Assets/Script/Player_Controller.cs"
-"Assets/Script/Road_Spawn_Script.cs"
-"Assets/Script/Road_Tile_Script.cs"
 "Assets/Script/Score_Coin_Counter_Script.cs"
 "Assets/Script/TileManager.cs"
 -langversion:9.0
